@@ -1,0 +1,29 @@
+<div class="container">
+	<nav class="navbar navbar-default topNavArea" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-brand-centered">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+				<div class="navbar-brand navbar-brand">NEUTRAVEL</div>
+			</div>
+			<div class="collapse navbar-collapse" id="navbar-brand">
+				<ul class="nav navbar-nav navbar-right">
+					<li style="font-weight:bold"><a href="#" class="dropdown-toggle" data-toggle="dropdown" id="userName">{{loggedInUser.FirstName}} {{loggedInUser.LastName}}({{loggedInUser.Role}})</a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="header2Area">
+		<h4 class="text-left"><a href="#" style="text-decoration:none; color: white">Domestic Travel Requests</a> </h4>
+	<a class="btn btn-primary" [routerLink]="['/CreateRequest']" id="newRequestLink" style="background-color: darkcyan; color: white"><b>Create New Request</b></a>
+		 
+		 <input *ngIf="router.url.includes('Welcome/ViewDetails/')" type="button" class="btn btn-warning" value="Cancel" (click)="OnCancel()" >
+		
+	</div>
+	<app-intiate-travel-req *ngIf="CheckDcs" class="contentPadding"></app-intiate-travel-req>
+	<router-outlet ></router-outlet>
+</div>		

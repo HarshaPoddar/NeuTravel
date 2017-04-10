@@ -1,0 +1,69 @@
+.container {
+      border: 5px solid black;
+       width:25%; 
+       margin-top: 50px;
+       float: left;
+       height: 400px;
+         background-color: whitesmoke ; 
+         margin-left: 50px;
+  }
+  .progressbar {
+      list-style-type: none;
+      position: relative;
+      padding: 0;
+      margin: 0;
+  }
+  .progressbar li {
+      margin-top: 60px;
+  }
+  .progressbar li i{
+      width: 30px;
+      height: 30px;
+      display: block;
+      text-align: center;
+      line-height: 30px;
+      border: 1px solid black;
+      background: darkslategray;
+      border-radius: 50%;
+  }
+  .progressbar li i:after{
+   content: "";
+   height: 1px;
+   position: absolute;
+   margin-top: 35px;
+   z-index: -1;
+  }
+  .progressbar li div{
+      margin-left: 50px;
+      margin-top: -30px;
+      color: black;
+  }
+   .progressbar li.active div{
+      margin-left: 50px;
+      margin-top: -30px;
+      color: green;
+  }
+  .progressbar li:after {
+      content: '';
+      width: 1px;
+      height:100%;
+      background-color: black;
+      position: absolute;
+      top: 4px;
+      left: 15px;
+      z-index: -1;
+  }
+  .progressbar li:first-child:after {
+      content: none;
+  }
+  .progressbar div.active {
+      color: white;      
+  }
+  .progressbar li.active:before {
+      border-color: green;
+      color: green;
+  }
+  .progressbar li.active + li:after {
+      background-color: green;
+  }
+ 

@@ -1,0 +1,597 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="NeuTravel.DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ProjectId" />
+          </Key>
+          <Property Name="ProjectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProjectName" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Travel">
+          <Key>
+            <PropertyRef Name="TravelId" />
+          </Key>
+          <Property Name="TravelId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TravellerId" Type="int" Nullable="false" />
+          <Property Name="TravelDetailsId" Type="int" Nullable="false" />
+          <Property Name="StatusId" Type="int" Nullable="false" />
+          <Property Name="TravelProgressId" Type="int" Nullable="false" />
+          <Property Name="IsCancelled" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CancelledDate" Type="datetime" />
+          <Property Name="CancelledBy" Type="int" />
+          <Property Name="LastModifiedDate" Type="datetime" />
+          <Property Name="LastModifiedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="TravelDetails">
+          <Key>
+            <PropertyRef Name="TravelDetailsId" />
+          </Key>
+          <Property Name="TravelDetailsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TravelFrom" Type="nvarchar" MaxLength="50" />
+          <Property Name="TravelTo" Type="nvarchar" MaxLength="50" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="ProjectId" Type="int" />
+          <Property Name="Purpose" Type="nvarchar" MaxLength="50" />
+          <Property Name="HotelName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" />
+          <Property Name="RoomType" Type="nvarchar" MaxLength="500" />
+          <Property Name="Occupancy" Type="nvarchar" MaxLength="500" />
+          <Property Name="NumberOfRooms" Type="int" />
+          <Property Name="NumberOfNights" Type="int" />
+          <Property Name="InBoundFlightNameAndNumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="InBoundAirport" Type="nvarchar" MaxLength="100" />
+          <Property Name="InBoundPNR" Type="nvarchar" MaxLength="100" />
+          <Property Name="OutBoundFlightNameAndNumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="OutBoundAirport" Type="nvarchar" MaxLength="100" />
+          <Property Name="OutBoundPNR" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="TravelProgress">
+          <Key>
+            <PropertyRef Name="TravelProgressId" />
+          </Key>
+          <Property Name="TravelProgressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TravelInitiatedBy" Type="int" />
+          <Property Name="TravelInitiatedDate" Type="datetime" />
+          <Property Name="AccomodationBookedBy" Type="int" />
+          <Property Name="AccomodationBookedDate" Type="datetime" />
+          <Property Name="FlightsBookedBy" Type="int" />
+          <Property Name="FlightsBookedDate" Type="datetime" />
+          <Property Name="TravellerConfirmationDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoleId" Type="int" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="UserRoles">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Role" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Employee_To UserRoles">
+          <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRoles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Travel_To CancelledBy">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Travel" Type="Self.Travel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Travel">
+              <PropertyRef Name="CancelledBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Travel_To Progress">
+          <End Role="TravelProgress" Type="Self.TravelProgress" Multiplicity="1" />
+          <End Role="Travel" Type="Self.Travel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelProgress">
+              <PropertyRef Name="TravelProgressId" />
+            </Principal>
+            <Dependent Role="Travel">
+              <PropertyRef Name="TravelProgressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Travel_To TravelDetails">
+          <End Role="TravelDetails" Type="Self.TravelDetails" Multiplicity="1" />
+          <End Role="Travel" Type="Self.Travel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelDetails">
+              <PropertyRef Name="TravelDetailsId" />
+            </Principal>
+            <Dependent Role="Travel">
+              <PropertyRef Name="TravelDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Travel_To User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Travel" Type="Self.Travel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Travel">
+              <PropertyRef Name="TravellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelDetails_AccomodationBookedBy">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="TravelProgress" Type="Self.TravelProgress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="TravelProgress">
+              <PropertyRef Name="AccomodationBookedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelDetails_FlightsBookedBy">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="TravelProgress" Type="Self.TravelProgress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="TravelProgress">
+              <PropertyRef Name="FlightsBookedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelDetails_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="TravelDetails" Type="Self.TravelDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectId" />
+            </Principal>
+            <Dependent Role="TravelDetails">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelDetails_TravelInitiatedBy">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="TravelProgress" Type="Self.TravelProgress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="TravelProgress">
+              <PropertyRef Name="TravelInitiatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="NeuTravelDBModelStoreContainer">
+          <EntitySet Name="Project" EntityType="Self.Project" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Travel" EntityType="Self.Travel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TravelDetails" EntityType="Self.TravelDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TravelProgress" EntityType="Self.TravelProgress" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Employee_To UserRoles" Association="Self.FK_Employee_To UserRoles">
+            <End Role="UserRoles" EntitySet="UserRoles" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Travel_To CancelledBy" Association="Self.FK_Travel_To CancelledBy">
+            <End Role="User" EntitySet="User" />
+            <End Role="Travel" EntitySet="Travel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Travel_To Progress" Association="Self.FK_Travel_To Progress">
+            <End Role="TravelProgress" EntitySet="TravelProgress" />
+            <End Role="Travel" EntitySet="Travel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Travel_To TravelDetails" Association="Self.FK_Travel_To TravelDetails">
+            <End Role="TravelDetails" EntitySet="TravelDetails" />
+            <End Role="Travel" EntitySet="Travel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Travel_To User" Association="Self.FK_Travel_To User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Travel" EntitySet="Travel" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelDetails_AccomodationBookedBy" Association="Self.FK_TravelDetails_AccomodationBookedBy">
+            <End Role="User" EntitySet="User" />
+            <End Role="TravelProgress" EntitySet="TravelProgress" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelDetails_FlightsBookedBy" Association="Self.FK_TravelDetails_FlightsBookedBy">
+            <End Role="User" EntitySet="User" />
+            <End Role="TravelProgress" EntitySet="TravelProgress" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelDetails_Project" Association="Self.FK_TravelDetails_Project">
+            <End Role="Project" EntitySet="Project" />
+            <End Role="TravelDetails" EntitySet="TravelDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelDetails_TravelInitiatedBy" Association="Self.FK_TravelDetails_TravelInitiatedBy">
+            <End Role="User" EntitySet="User" />
+            <End Role="TravelProgress" EntitySet="TravelProgress" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="NeuTravel.DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="ProjectId" />
+          </Key>
+          <Property Name="ProjectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="TravelDetails" Relationship="Self.FK_TravelDetails_Project" FromRole="Project" ToRole="TravelDetails" />
+        </EntityType>
+        <EntityType Name="Travel">
+          <Key>
+            <PropertyRef Name="TravelId" />
+          </Key>
+          <Property Name="TravelId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TravellerId" Type="Int32" Nullable="false" />
+          <Property Name="TravelDetailsId" Type="Int32" Nullable="false" />
+          <Property Name="StatusId" Type="Int32" Nullable="false" />
+          <Property Name="TravelProgressId" Type="Int32" Nullable="false" />
+          <Property Name="IsCancelled" Type="String" Nullable="false" />
+          <Property Name="CancelledDate" Type="DateTime" Precision="3" />
+          <Property Name="CancelledBy" Type="Int32" />
+          <Property Name="LastModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModifiedBy" Type="Int32" />
+          <NavigationProperty Name="User" Relationship="Self.FK_Travel_To_CancelledBy" FromRole="Travel" ToRole="User" />
+          <NavigationProperty Name="TravelProgress" Relationship="Self.FK_Travel_To_Progress" FromRole="Travel" ToRole="TravelProgress" />
+          <NavigationProperty Name="TravelDetail" Relationship="Self.FK_Travel_To_TravelDetails" FromRole="Travel" ToRole="TravelDetails" />
+          <NavigationProperty Name="User1" Relationship="Self.FK_Travel_To_User" FromRole="Travel" ToRole="User" />
+        </EntityType>
+        <EntityType Name="TravelDetail">
+          <Key>
+            <PropertyRef Name="TravelDetailsId" />
+          </Key>
+          <Property Name="TravelDetailsId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TravelFrom" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TravelTo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="ProjectId" Type="Int32" />
+          <Property Name="Purpose" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HotelName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RoomType" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Occupancy" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="NumberOfRooms" Type="Int32" />
+          <Property Name="NumberOfNights" Type="Int32" />
+          <Property Name="InBoundFlightNameAndNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="InBoundAirport" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="InBoundPNR" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OutBoundFlightNameAndNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OutBoundAirport" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="OutBoundPNR" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Project" Relationship="Self.FK_TravelDetails_Project" FromRole="TravelDetails" ToRole="Project" />
+          <NavigationProperty Name="Travels" Relationship="Self.FK_Travel_To_TravelDetails" FromRole="TravelDetails" ToRole="Travel" />
+        </EntityType>
+        <EntityType Name="TravelProgress">
+          <Key>
+            <PropertyRef Name="TravelProgressId" />
+          </Key>
+          <Property Name="TravelProgressId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TravelInitiatedBy" Type="Int32" />
+          <Property Name="TravelInitiatedDate" Type="DateTime" Precision="3" />
+          <Property Name="AccomodationBookedBy" Type="Int32" />
+          <Property Name="AccomodationBookedDate" Type="DateTime" Precision="3" />
+          <Property Name="FlightsBookedBy" Type="Int32" />
+          <Property Name="FlightsBookedDate" Type="DateTime" Precision="3" />
+          <Property Name="TravellerConfirmationDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Travels" Relationship="Self.FK_Travel_To_Progress" FromRole="TravelProgress" ToRole="Travel" />
+          <NavigationProperty Name="User" Relationship="Self.FK_TravelDetails_AccomodationBookedBy" FromRole="TravelProgress" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="Self.FK_TravelDetails_FlightsBookedBy" FromRole="TravelProgress" ToRole="User" />
+          <NavigationProperty Name="User2" Relationship="Self.FK_TravelDetails_TravelInitiatedBy" FromRole="TravelProgress" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleId" Type="Int32" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Travels" Relationship="Self.FK_Travel_To_CancelledBy" FromRole="User" ToRole="Travel" />
+          <NavigationProperty Name="Travels1" Relationship="Self.FK_Travel_To_User" FromRole="User" ToRole="Travel" />
+          <NavigationProperty Name="TravelProgresses" Relationship="Self.FK_TravelDetails_AccomodationBookedBy" FromRole="User" ToRole="TravelProgress" />
+          <NavigationProperty Name="TravelProgresses1" Relationship="Self.FK_TravelDetails_FlightsBookedBy" FromRole="User" ToRole="TravelProgress" />
+          <NavigationProperty Name="TravelProgresses2" Relationship="Self.FK_TravelDetails_TravelInitiatedBy" FromRole="User" ToRole="TravelProgress" />
+          <NavigationProperty Name="UserRole" Relationship="Self.FK_Employee_To_UserRoles" FromRole="User" ToRole="UserRoles" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Employee_To_UserRoles" FromRole="UserRoles" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_TravelDetails_Project">
+          <End Role="Project" Type="Self.Project" Multiplicity="0..1" />
+          <End Role="TravelDetails" Type="Self.TravelDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Project">
+              <PropertyRef Name="ProjectId" />
+            </Principal>
+            <Dependent Role="TravelDetails">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Travel_To_CancelledBy">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Travel" Type="Self.Travel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Travel">
+              <PropertyRef Name="CancelledBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Travel_To_Progress">
+          <End Role="TravelProgress" Type="Self.TravelProgress" Multiplicity="1" />
+          <End Role="Travel" Type="Self.Travel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelProgress">
+              <PropertyRef Name="TravelProgressId" />
+            </Principal>
+            <Dependent Role="Travel">
+              <PropertyRef Name="TravelProgressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Travel_To_TravelDetails">
+          <End Role="TravelDetails" Type="Self.TravelDetail" Multiplicity="1" />
+          <End Role="Travel" Type="Self.Travel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TravelDetails">
+              <PropertyRef Name="TravelDetailsId" />
+            </Principal>
+            <Dependent Role="Travel">
+              <PropertyRef Name="TravelDetailsId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Travel_To_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Travel" Type="Self.Travel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Travel">
+              <PropertyRef Name="TravellerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelDetails_AccomodationBookedBy">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="TravelProgress" Type="Self.TravelProgress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="TravelProgress">
+              <PropertyRef Name="AccomodationBookedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelDetails_FlightsBookedBy">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="TravelProgress" Type="Self.TravelProgress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="TravelProgress">
+              <PropertyRef Name="FlightsBookedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TravelDetails_TravelInitiatedBy">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="TravelProgress" Type="Self.TravelProgress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="TravelProgress">
+              <PropertyRef Name="TravelInitiatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_To_UserRoles">
+          <End Role="UserRoles" Type="Self.UserRole" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserRoles">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Projects" EntityType="Self.Project" />
+          <EntitySet Name="Travels" EntityType="Self.Travel" />
+          <EntitySet Name="TravelDetails" EntityType="Self.TravelDetail" />
+          <EntitySet Name="TravelProgresses" EntityType="Self.TravelProgress" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
+          <AssociationSet Name="FK_TravelDetails_Project" Association="Self.FK_TravelDetails_Project">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="TravelDetails" EntitySet="TravelDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Travel_To_CancelledBy" Association="Self.FK_Travel_To_CancelledBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Travel" EntitySet="Travels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Travel_To_Progress" Association="Self.FK_Travel_To_Progress">
+            <End Role="TravelProgress" EntitySet="TravelProgresses" />
+            <End Role="Travel" EntitySet="Travels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Travel_To_TravelDetails" Association="Self.FK_Travel_To_TravelDetails">
+            <End Role="TravelDetails" EntitySet="TravelDetails" />
+            <End Role="Travel" EntitySet="Travels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Travel_To_User" Association="Self.FK_Travel_To_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Travel" EntitySet="Travels" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelDetails_AccomodationBookedBy" Association="Self.FK_TravelDetails_AccomodationBookedBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="TravelProgress" EntitySet="TravelProgresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelDetails_FlightsBookedBy" Association="Self.FK_TravelDetails_FlightsBookedBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="TravelProgress" EntitySet="TravelProgresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TravelDetails_TravelInitiatedBy" Association="Self.FK_TravelDetails_TravelInitiatedBy">
+            <End Role="User" EntitySet="Users" />
+            <End Role="TravelProgress" EntitySet="TravelProgresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_To_UserRoles" Association="Self.FK_Employee_To_UserRoles">
+            <End Role="UserRoles" EntitySet="UserRoles" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="NeuTravelDBModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Projects">
+            <EntityTypeMapping TypeName="NeuTravel.DBModel.Project">
+              <MappingFragment StoreEntitySet="Project">
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Travels">
+            <EntityTypeMapping TypeName="NeuTravel.DBModel.Travel">
+              <MappingFragment StoreEntitySet="Travel">
+                <ScalarProperty Name="TravelId" ColumnName="TravelId" />
+                <ScalarProperty Name="TravellerId" ColumnName="TravellerId" />
+                <ScalarProperty Name="TravelDetailsId" ColumnName="TravelDetailsId" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="TravelProgressId" ColumnName="TravelProgressId" />
+                <ScalarProperty Name="IsCancelled" ColumnName="IsCancelled" />
+                <ScalarProperty Name="CancelledDate" ColumnName="CancelledDate" />
+                <ScalarProperty Name="CancelledBy" ColumnName="CancelledBy" />
+                <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+                <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelDetails">
+            <EntityTypeMapping TypeName="NeuTravel.DBModel.TravelDetail">
+              <MappingFragment StoreEntitySet="TravelDetails">
+                <ScalarProperty Name="TravelDetailsId" ColumnName="TravelDetailsId" />
+                <ScalarProperty Name="TravelFrom" ColumnName="TravelFrom" />
+                <ScalarProperty Name="TravelTo" ColumnName="TravelTo" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="Purpose" ColumnName="Purpose" />
+                <ScalarProperty Name="HotelName" ColumnName="HotelName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="RoomType" ColumnName="RoomType" />
+                <ScalarProperty Name="Occupancy" ColumnName="Occupancy" />
+                <ScalarProperty Name="NumberOfRooms" ColumnName="NumberOfRooms" />
+                <ScalarProperty Name="NumberOfNights" ColumnName="NumberOfNights" />
+                <ScalarProperty Name="InBoundFlightNameAndNumber" ColumnName="InBoundFlightNameAndNumber" />
+                <ScalarProperty Name="InBoundAirport" ColumnName="InBoundAirport" />
+                <ScalarProperty Name="InBoundPNR" ColumnName="InBoundPNR" />
+                <ScalarProperty Name="OutBoundFlightNameAndNumber" ColumnName="OutBoundFlightNameAndNumber" />
+                <ScalarProperty Name="OutBoundAirport" ColumnName="OutBoundAirport" />
+                <ScalarProperty Name="OutBoundPNR" ColumnName="OutBoundPNR" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TravelProgresses">
+            <EntityTypeMapping TypeName="NeuTravel.DBModel.TravelProgress">
+              <MappingFragment StoreEntitySet="TravelProgress">
+                <ScalarProperty Name="TravelProgressId" ColumnName="TravelProgressId" />
+                <ScalarProperty Name="TravelInitiatedBy" ColumnName="TravelInitiatedBy" />
+                <ScalarProperty Name="TravelInitiatedDate" ColumnName="TravelInitiatedDate" />
+                <ScalarProperty Name="AccomodationBookedBy" ColumnName="AccomodationBookedBy" />
+                <ScalarProperty Name="AccomodationBookedDate" ColumnName="AccomodationBookedDate" />
+                <ScalarProperty Name="FlightsBookedBy" ColumnName="FlightsBookedBy" />
+                <ScalarProperty Name="FlightsBookedDate" ColumnName="FlightsBookedDate" />
+                <ScalarProperty Name="TravellerConfirmationDate" ColumnName="TravellerConfirmationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="NeuTravel.DBModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoles">
+            <EntityTypeMapping TypeName="NeuTravel.DBModel.UserRole">
+              <MappingFragment StoreEntitySet="UserRoles">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

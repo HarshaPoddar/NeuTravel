@@ -1,0 +1,40 @@
+<div *ngIf="intiatedTravelRequestDetail">
+	<div class="firstDiv">
+		<div>
+			<div class="row">
+		<h4 class="headerElement col-md-5"  style ="color: black"><b>EmployeeName:</b></h4>
+		<h4 class="TravelSummary">{{intiatedTravelRequestDetail.EmployeeName}}</h4>
+		</div>
+		<div>
+			</div>
+			<div class="row">
+		<h4 class="headerElement col-md-5" style ="color: black"><b>ProjectName:</b></h4>
+		<h4 class="TravelSummary"> {{intiatedTravelRequestDetail.ProjectName}}</h4>
+		</div>
+		</div>
+		<div>
+			<div class="row">
+		<h4 class="headerElement  col-md-5"  style ="color: black"><b>PurposeofTravel:</b></h4>
+		<h4 class="TravelSummary">{{intiatedTravelRequestDetail.PurposeOfTravel}}</h4>
+		</div>
+		</div>
+		<div class="row">
+			<h4 class="headerElement col-md-5"  style ="color: black"><b>TravelFrom:</b></h4>
+		    <h4 class="TravelSummary">	{{intiatedTravelRequestDetail.TravelFrom}}</h4>
+			</div>
+		<div class="row">
+			<h4 class="headerElement col-md-5"  style ="color: black"><b>TravelTo:</b></h4>
+		    <h4 class="TravelSummary">	{{intiatedTravelRequestDetail.TravelTo}}</h4>
+		</div>
+		<div class="row">
+			<h4 class="headerElement col-md-5"  style ="color: black"><b>StartDate:</b></h4>
+	    	<h4 class="TravelSummary">	{{intiatedTravelRequestDetail.StartDate}}</h4>
+			</div>
+		<div class="row">
+			<h4 class="headerElement col-md-5"  style ="color: black"><b>EndDate:</b></h4>
+			<h4 class="TravelSummary">{{intiatedTravelRequestDetail.EndDate}}</h4>
+		</div>
+	</div>
+<router-outlet></router-outlet>
+<app-progress-bar [status] ="intiatedTravelRequestDetail.Status"> </app-progress-bar>
+

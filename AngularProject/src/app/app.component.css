@@ -1,0 +1,34 @@
+.navbar-right{
+    margin-right:15px;
+}
+.topNavArea{
+    margin:0;
+}
+.header2Area{
+    height: 50px;
+    clear: both;
+    background: darkslategrey;
+    color:#ffffff;
+}
+.header2Area h4{
+    padding-top:7px;
+    padding-left:15px;
+    float:left;
+    color:#ffffff;
+}
+.header2Area .btn{
+    float: right;
+    margin-right:20px;
+    margin-top:7px;
+}
+.cus-table1{
+    width:80%;
+    margin:20px auto;
+}
+.contentPadding{
+    padding: 10px;
+}
+.text-left
+{
+    color:white;
+}

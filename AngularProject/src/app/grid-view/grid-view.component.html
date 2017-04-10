@@ -1,0 +1,32 @@
+<pagination-controls (pageChange)="p = $event" ></pagination-controls>
+<table class="table table-striped table-responsive table-bordered cus-table1" width="80%" id="GridTable">
+    <thead>
+        <tr class ="TableHeader" style="background-color:darkslategrey">
+            <th>Employee Name</th>
+            <th>Project</th>
+            <th>From</th>
+            <th>To</th>
+            <th>StartDate</th>
+            <th>EndDate</th>
+            <th>Purpose</th>
+            <th>Status</th>
+            <th>ViewDetails</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr  *ngFor="let intiatedTravelRequestDetail of intiatedTravelRequestDetails| paginate: { itemsPerPage: 10, currentPage: p } ; let i=index"
+            (click)="setClickedRow(i)" [class.active]="i == selectedRow ">
+            <td class="tableElements">{{intiatedTravelRequestDetail.EmployeeName}}</td>
+            <td class="tableElements">{{intiatedTravelRequestDetail.ProjectName}}</td>
+            <td class="tableElements">{{intiatedTravelRequestDetail.TravelFrom}}</td>
+            <td class="tableElements">{{intiatedTravelRequestDetail.TravelTo}}</td>
+            <td class="tableElements">{{intiatedTravelRequestDetail.StartDate}}</td>
+            <td class="tableElements">{{intiatedTravelRequestDetail.EndDate}}</td>
+            <td class="tableElements">{{intiatedTravelRequestDetail.PurposeOfTravel}}</td>
+            <td class="success">{{intiatedTravelRequestDetail.Status}}</td>
+            <td>
+                <a [routerLink]="['ViewDetails',intiatedTravelRequestDetail.TravelId]" style = "color: darkblue"> ViewDetails</a></td>
+        </tr>
+    </tbody>
+</table>

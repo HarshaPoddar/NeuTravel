@@ -1,0 +1,18 @@
+.success{
+    color:yellowgreen;
+}
+#GridTable
+{
+    padding-top: 1000px;
+    background-color:whitesmoke;
+}
+.table tr.active td {
+  background-color:#123456 !important;
+  color:deepskyblue;
+}
+.TableHeader{
+    color: white;
+text-align: center;
+top: 50%;
+bottom: 50%;
+}
